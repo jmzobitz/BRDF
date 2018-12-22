@@ -1,0 +1,10 @@
+Package: BRDF
+Title: A collection of files to compute BRDF using GSVD
+Version: 0.0.0.9000
+Authors@R: person("First", "Last", email = "zobitz@augsburg.edu", role = c("aut", "cre"))
+Description: Computes the BRDF kernel weights and associated albedo
+Depends: R (>= 3.5.1)
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.0

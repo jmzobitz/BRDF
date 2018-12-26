@@ -1,0 +1,28 @@
+#' BRDF Kernel matrix entries for 26 MODIS pixels.
+#'
+#'
+#' \itemize{
+#'   \item site. Fluxnet site abbreviation
+#'   \item time. Day of the year in 2017
+#'   \item K_Iso. Calculated value of Isometric kernel
+#'   \item K_RossThick. Calculated value of Ross Thick kernel
+#'   \item K_Iso. Calculated value of Li Sparse kernel
+#'   \item bandNUM. Reflectance band (1-7)
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name fluxnet
+#' @usage data(fluxnet)
+#' @format A data frame with 1949 rows and 12 variables
+#' @source  Original Data:
+#'
+#'  Vermote, E., Wolfe, R. (2015). MYD09GA MODIS/Aqua Surface Reflectance Daily L2G Global 1kmand 500m SIN Grid V006. NASA EOSDIS LP DAAC. doi: 10.5067/MODIS/MYD09GA.006. Accessed September 14, 2018.
+#'
+#'   Vermote, E., Wolfe, R. (2015). MOD09GA MODIS/Terra Surface Reflectance Daily L2G Global 1kmand 500m SIN Grid V006. NASA EOSDIS LP DAAC. doi: 10.5067/MODIS/MOD09GA.006. Accessed September 17, 2018.
+#'
+#' Equations for Kernel values:
+#'
+#' Strahler, A H, and J.-P. Muller. 1999. “MODIS BRDF/Albedo Product: Algorithm Theoretical Basis Document Version 5.0.” NASA.
+
+NULL

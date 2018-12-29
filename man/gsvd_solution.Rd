@@ -4,14 +4,14 @@
 \alias{gsvd_solution}
 \title{Compute the solution for the kernel weights for a GSVD decomposition}
 \usage{
-gsvd_solution(gsvdResult, lambda, rho)
+gsvd_solution(gsvdResult, lambda, data)
 }
 \arguments{
 \item{gsvdResult}{decomposition}
 
-\item{lambda}{smoothness parameter - can be a vector of values}
+\item{lambda}{smoothness parameter - is a list of values}
 
-\item{rho}{right hand side of the equation - is a data frame with the band, value, and measurement}
+\item{data}{right hand side of the equation - is a list of values with the band, value, and measurement}
 }
 \value{
 Solution to Krylov subspace solution

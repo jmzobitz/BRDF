@@ -1,6 +1,6 @@
 #' Compute the solution for the kernel weights for a GSVD decomposition
 #'
-#' \code{gsvd_norm} Computes residual and solution norm for a GSVD matrix decomposition
+#' \code{gsvd_solution_compute} Computes residual and solution norm for a GSVD matrix decomposition
 #'
 #' @param gsvdResult GSVD decomposition
 #' @param lambda_df smoothness parameter - can be a vector of values - must be a data frame
@@ -14,11 +14,18 @@
 #' @export
 
 
-gsvd_norm<-function(gsvdResult,lambda_df,rho) {
+gsvd_solution_compute<-function(gsvdResult,lambda_df,rho) {
 
-  lambda <- lambda_df
+  lambda <- lambda_df$lambda
   # Identify size of lambda values and number of bands
   nLambda = length(lambda)  # Number of lambdas we have in our sequence
+
+  rho_curr <- rho %>%
+    #   filter(band == band_vals[band_idx] ) %>%
+    select(value) %>%
+    as.matrix()
+
+
 
   # List to hold the results
   f_results <- vector("list", nLambda)  # For each of the lambdas
@@ -57,45 +64,37 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
 
 
 
-    rho_curr <- rho %>%
-   #   filter(band == band_vals[band_idx] ) %>%
-      select(value) %>%
-      as.matrix()
 
-    f0 = rep(0,n)  # The initialization of it all
+  f0 = rep(0,n)  # The initialization of it all
 
-    # Formula given in pg 72, Hansen Rank Deficient and discrete ill posed problems
-    delta0 <- (diag(m)-U%*%t(U))%*%rho_curr
+  for (i in 1: k) {
+    f0 = f0 + drop(t(U[,i])%*%rho_curr) * X[,i]
+  }
 
-    for (j in seq_along(lambda)) {
-      filter = gamma^2/(gamma^2+lambda[j]^2)
-      Bf=f0
-      epsilon = delta0
-      # Formula given in pg 72, Hansen Rank Deficient and discrete ill posed problems
-      for (i in (k+1): m) {
-        Bf = Bf + filter[i]*drop(t(U[,i])%*%rho_curr) * Q[,i] / gamma[i]
+  for (j in seq_along(lambda)) {
+    filter = gamma^2/(gamma^2+lambda[j]^2)
+    f=f0
 
-        epsilon = epsilon + (1-filter[i])*drop(t(U[,i])%*%rho_curr)*U[,i]
-      }
-
-      #f_results[[j]] <-data.frame(residual=norm(epsilon,type="2"),
-#                                  solution=norm(Bf,type="2"),
-#                                  lambda=lambda[j])
-      f_results[[j]] <-data.frame(rmse = sd(epsilon),
-                                  residual=norm(epsilon,type="2"),
-                                  solution=norm(Bf,type="2"),
-                                  lambda=lambda[j])
+    for (i in (k+1): m) {
+      f = f + filter[i]*drop(t(U[,i])%*%rho_curr) * X[,i] / alpha[i]
     }
 
-    out_little_f <- bind_rows(f_results)
+    f_results[[j]] <- f
+
+  }
+
+
+  out_little_f <- bind_cols(f_results)
+  names(out_little_f) <- lambda
+
+  out_soln <- out_little_f %>%
+    gather(key="lambda",value="value") %>%
+    mutate(time=rep(1:365,3),
+           kernel=rep(c("0","1","2"),each=365) ) %>%
+    select(-lambda)
 
 
 
-
-
-  out_f <-out_little_f %>%
-    gather(key="norm",value="result",rmse,residual,solution) %>%
-    arrange(lambda)
-  return(out_f)
+  return(out_soln)
 }
 

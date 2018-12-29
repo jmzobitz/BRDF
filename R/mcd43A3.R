@@ -4,9 +4,8 @@
 #' \itemize{
 #'   \item site. Fluxnet site abbreviation
 #'   \item time. Day of the year in 2017
-#'   \item method. Data product name from MODIS
 #'   \item band. Reflectance band (1-7)
-#'   \item albedo. Albedo measurement
+#'   \item value. Albedo measurement
 #'   \item type. Black sky or white sky albedo
 #' }
 #'

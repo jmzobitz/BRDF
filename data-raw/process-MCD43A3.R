@@ -17,10 +17,10 @@ modisAlbedoData_BSA <- read_csv('data-raw/fluxnet-combined-albedo-black-sky/Flux
   rename(time=Date,site=ID) %>%   # Rename the columns
   mutate(time = yday(time)) %>%
   gather(key=band_str,value=value,-time,-site) %>%  # Gather by site and time
-  mutate(kernel=str_extract(band_str,".$"),band=str_extract(band_str, "Band.")) %>% # Add columns for the kernel and reflectance band
+  mutate(band=str_extract(band_str, "Band.")) %>% # Add columns for the kernel and reflectance band
   mutate(band=str_to_lower(band)) %>%  # Convert to lower case
   select(-band_str) %>%
-  arrange(site,time,kernel)
+  arrange(site,time,band)
 
 # Pull in the white sky albedo and filter
 modisAlbedoData_WSA <- read_csv('data-raw/fluxnet-combined-albedo-black-sky/Fluxnet-Combined-Albedo-Black-Sky-MCD43A3-006-results.csv') %>%
@@ -29,10 +29,10 @@ modisAlbedoData_WSA <- read_csv('data-raw/fluxnet-combined-albedo-black-sky/Flux
   rename(time=Date,site=ID) %>%   # Rename the columns
   mutate(time = yday(time)) %>%
   gather(key=band_str,value=value,-time,-site) %>%  # Gather by site and time
-  mutate(kernel=str_extract(band_str,".$"),band=str_extract(band_str, "Band.")) %>% # Add columns for the kernel and reflectance band
+  mutate(band=str_extract(band_str, "Band.")) %>% # Add columns for the kernel and reflectance band
   mutate(band=str_to_lower(band)) %>%  # Convert to lower case
   select(-band_str) %>%
-  arrange(site,time,kernel)
+  arrange(site,time,band)
 
 
 modisAlbedo_flag <- read_csv('data-raw/fluxnet-combined-albedo-black-sky/Fluxnet-Combined-Albedo-Black-Sky-MCD43A3-006-results.csv') %>%

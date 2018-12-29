@@ -28,6 +28,11 @@ use_data(lambda_list,overwrite = TRUE)
 solution_list <- pmap(list(x=gsvd_list,y=lambda_list,z=data_list),.f=function(x,y,z){ gsvd_solution(x,y,z) })
 use_data(solution_list,overwrite = TRUE)
 
+# Process white sky albedo
+albedo_list <- map(solution_list,albedo_compute)
+use_data(albedo_list,overwrite = TRUE)
+
+
 
 
 

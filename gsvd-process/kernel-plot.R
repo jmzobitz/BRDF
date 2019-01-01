@@ -36,11 +36,6 @@ prepender_b <- function(string, prefix = "Reflectance Band ") {
 }
 
 
-
-####
-
-####
-
 kernelPlot   <- big_data %>%
   mutate(site = fct_relevel(site, site_read),
          kernel_variable = fct_relevel(kernel_variable, c("f[iso]","f[vol]","f[geo]"))) %>%

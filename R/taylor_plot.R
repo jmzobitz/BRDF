@@ -27,7 +27,7 @@
 
 
 
-taylor_plot <- function(min_R = 0.25, max_R = 1.75, contours = 6, n_lines = 10,x_0 = 1, ref_r_min=0.25, ref_r_max=2,ref_contours = 8) {
+taylor_plot <- function(min_R = 0.25, max_R = 1.75, contours = 7, n_lines = 10,x_0 = 1, ref_r_min=0.25, ref_r_max=2,ref_contours = 8) {
 
   # Behold the arcs
   arcs <- data.frame(

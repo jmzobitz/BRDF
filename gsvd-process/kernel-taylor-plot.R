@@ -70,9 +70,9 @@ kernel_rsq <- kernel_data %>%
 t_plot <- taylor_plot()
 
 curr_plot <- t_plot +
-  geom_point(data=kernel_rsq,aes(x=x_coord,y=y_coord,color=bin)) +
+  geom_point(data=kernel_rsq,aes(x=x_coord,y=y_coord)) +
   facet_grid(kernel~band,labeller=labeller(kernel=label_parsed,band=prepender_b)) +
-  labs(x="",y=expression(sigma[GSVD]),color="N") + theme(axis.text = element_text(size=14),
+  labs(x="",y=expression(sigma[GSVD])) + theme(axis.text = element_text(size=14),
                                                                                    axis.title=element_text(size=28),
                                                                                    title=element_text(size=26),
                                                                                    legend.text=element_text(size=12),

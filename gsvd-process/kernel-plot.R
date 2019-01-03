@@ -1,6 +1,16 @@
 # Figure 4: kernel weight plot over time
 
+# Determine how many kernel weights are negative
+solution_list %>% bind_rows(.id="site") %>% filter(value<0) %>% summarize(mean=mean(value),sd=sd(value),tot_v=n())
 
+small_data <-solution_list %>% bind_rows(.id="site") %>% filter(value<0)
+quantile(small_data$value,probs = c(0.025,0.975))
+
+# Number of kernels
+dim(solution_list %>% bind_rows(.id="site"))
+
+
+modisBRDF$
 site_read = c("AU-Lox","IT-CA1","ZM-Mon","JP-MBF","DE-Hai","US-Wi3")
 band_read = c("band1","band2")
 

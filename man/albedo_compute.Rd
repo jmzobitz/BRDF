@@ -3,6 +3,9 @@
 \name{albedo_compute}
 \alias{albedo_compute}
 \title{Compute the white sky albedo for an estimated kernel weight}
+\source{
+\url{https://www.umb.edu/spectralmass/terra_aqua_modis/v006/mcd43a1_brdif_albedo_model_parameters_product}
+}
 \usage{
 albedo_compute(solution_data)
 }
@@ -13,7 +16,7 @@ albedo_compute(solution_data)
 Data frame that contains the time, band, value, and type (currently white-sky) albedo - for black-sky albedo we need solar noon
 }
 \description{
-\code{albedo_compute} Computes residual and solution norm for a GSVD matrix decomposition
+\code{albedo_compute} Computes the albedo values for a given kernel BRDF weights.
 }
 \examples{
 

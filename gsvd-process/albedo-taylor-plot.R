@@ -33,7 +33,8 @@ prepender_b <- function(string, prefix = "Reflectance Band ") {
 
 }
 
-lambda_values <- lambda_list %>% bind_rows(.id="site")
+lambda_values <- lambda_list %>% bind_rows(.id="site") %>%
+  mutate(bin_lambda = cut_number(lambda,n=5))
 
 data_points <- fluxnet %>%
   group_by(site) %>%
@@ -62,9 +63,9 @@ albedo_rsq <- albedo_data %>%
 t_plot <- taylor_plot()
 
 curr_plot <- t_plot +
-  geom_point(data=albedo_rsq,aes(x=x_coord,y=y_coord,color=bin)) +
+  geom_point(data=albedo_rsq,aes(x=x_coord,y=y_coord)) +
   facet_grid(~band,labeller=labeller(band=prepender_b))+
-   labs(x="",y=expression(sigma[GSVD]),color="N") +
+   labs(x="",y=expression(sigma[GSVD])) +
   theme(axis.text = element_text(size=14),
         axis.title=element_text(size=28),
         title=element_text(size=26),
@@ -75,5 +76,5 @@ curr_plot <- t_plot +
 
 
 fileName <- paste0('manuscript-figures/albedoTaylor.png')
-ggsave(fileName,plot=curr_plot,width=12,height=2.5)
+ggsave(fileName,plot=curr_plot,width=14,height=3)
 

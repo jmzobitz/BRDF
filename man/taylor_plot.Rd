@@ -7,7 +7,7 @@
 Taylor, Karl E. 2001. “Summarizing Multiple Aspects of Model Performance in a Single Diagram.” Journal of Geophysical Research: Atmospheres 106 (D7): 7183–92. https://doi.org/10.1029/2000JD900719.
 }
 \usage{
-taylor_plot(min_R = 0.25, max_R = 1.75, contours = 6, n_lines = 10,
+taylor_plot(min_R = 0.25, max_R = 1.75, contours = 7, n_lines = 10,
   x_0 = 1, ref_r_min = 0.25, ref_r_max = 2, ref_contours = 8)
 }
 \arguments{

@@ -80,11 +80,11 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
       }
       if ( r <= m) {
         for (i in 1:l) {
-          Bf[i] = filter2[i]*drop(t(U[,i])%*%rho_curr)/ gamma[i]
+          Bf[i] = filter2[i]*drop(t(U[,i])%*%rho_curr)
         }
       } else {
         for (i in 1:(m-k)) {
-          Bf[i] = filter2[i]*drop(t(U[,i])%*%rho_curr)/ gamma[i]
+          Bf[i] = filter2[i]*drop(t(U[,i])%*%rho_curr)
         }
       }
       #f_results[[j]] <-data.frame(residual=norm(epsilon,type="2"),

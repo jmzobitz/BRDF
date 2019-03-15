@@ -60,8 +60,11 @@ gsvd_solution_compute<-function(gsvdResult,lambda_df,rho) {
 
   alpha = gsvdResult$alpha  # Singular values with sigma matrix
   mu = gsvdResult$beta  # Singular values with M matrix
-  filter = alpha/(alpha^2+mu^2*lambda[j]^2)
-  g = rep(0,n)
+
+
+  for (j in seq_along(lambda)) {
+    filter = alpha/(alpha^2+mu^2*lambda[j]^2)
+   g = rep(0,n)
 
   if (r <= m) {
     for(i in (n-r+1):(n-l)) {g[i]<- drop(t(U[,i])%*%rho_curr)}
@@ -75,7 +78,7 @@ gsvd_solution_compute<-function(gsvdResult,lambda_df,rho) {
     f_results[[j]] <- X %*% g
 
 
-
+}
 
   out_little_f <- bind_cols(f_results)
   names(out_little_f) <- lambda

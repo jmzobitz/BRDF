@@ -7,14 +7,21 @@ library(tidyverse)
 
 band_labels = 1:7
 
-ggplot(df,aes(x,y)) + geom_point() +
-  scale_x_discrete(breaks = 1:5, labels = letters[1:5])
+#ggplot(df,aes(x,y)) + geom_point() +
+#  scale_x_discrete(breaks = 1:5, labels = letters[1:5])
+
+
+nConverged <- lambda_list %>% bind_rows() %>%
+  filter(converged) %>%
+  group_by(band) %>% summarize(tot=n()) %>%
+  mutate(tot=paste0("N = ",tot))
 
 
 lambda_boxplot <- lambda_list %>% bind_rows() %>%
   filter(converged) %>%
   ggplot() +
   geom_boxplot(aes(x=band,y=lambda)) +
+  geom_label(data=nConverged,aes(x=band,y=70,label=tot),size=4) +
   scale_x_discrete(labels=1:7)+
   labs(x="Reflectance Band",y=expression(lambda)) +
   theme(axis.text = element_text(size=10),
@@ -24,5 +31,5 @@ lambda_boxplot <- lambda_list %>% bind_rows() %>%
         legend.title=element_text(size=16))
 
 fileName <- paste0('manuscript-figures/boxplot.png')
-ggsave(fileName,plot=residual_plot,width=14,height=4)
+ggsave(fileName,plot=lambda_boxplot)
 

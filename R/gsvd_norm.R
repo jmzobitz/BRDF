@@ -37,7 +37,7 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
 
 
   alpha = gsvdResult$alpha  # Singular values with sigma matrix
-  mu = gsvdResult$beta  # Singular values with M matrix
+  beta = gsvdResult$beta  # Singular values with M matrix
 
 
     rho_curr <- rho %>%

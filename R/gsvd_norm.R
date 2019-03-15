@@ -29,7 +29,7 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
   U = gsvdResult$U
   V = gsvdResult$V
   Q = gsvdResult$Q
-  invR = gsvdResult$invR
+ # invR = gsvdResult$invR
 
   n = dim(Q)[2]
   m = gsvdResult$m
@@ -73,11 +73,19 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
       epsilon = delta0
       # Formula given in pg 72, Hansen Rank Deficient and discrete ill posed problems
       for (i in (k+1): m) {
-        Bf = Bf + filter[i]*drop(t(U[,i])%*%rho_curr) / gamma[i]
+      #  Bf = Bf + filter[i]*drop(t(U[,i])%*%rho_curr) * Q[,i] / gamma[i]
 
         epsilon = epsilon + (1-filter[i])*drop(t(U[,i])%*%rho_curr)*U[,i]
       }
-
+      if ( r <= m) {
+        for (i in 1:l) {
+          Bf[i] = filter[i]*drop(t(U[,i])%*%rho_curr)/ gamma[i]
+        }
+      } else {
+        for (i in 1:(m-k)) {
+          Bf[i] = filter[i]*drop(t(U[,i])%*%rho_curr)/ gamma[i]
+        }
+      }
       #f_results[[j]] <-data.frame(residual=norm(epsilon,type="2"),
 #                                  solution=norm(Bf,type="2"),
 #                                  lambda=lambda[j])

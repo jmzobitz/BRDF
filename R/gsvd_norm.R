@@ -29,7 +29,7 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
   U = gsvdResult$U
   V = gsvdResult$V
   Q = gsvdResult$Q
-  invR = gsvdResult$invR
+ # invR = gsvdResult$invR
 
   n = dim(Q)[2]
   m = gsvdResult$m
@@ -40,16 +40,16 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
 
   # Now start to form up the solution
   # Doing the multiplication, split Q = [Q1 Q2], where Q1 = first n-r columns of Q, Q2 last r columns
-  if (n-r > 0){
-    zeroMat = matrix(0,nrow=r,ncol=n-r)
-    iMat = cbind(diag(1,nrow=n-r,ncol=n-r),t(zeroMat))
-    oInvR = cbind(zeroMat,invR)
-    newInvR = rbind(iMat,oInvR)
-  } else {
-    newInvR = invR
-  }
-
-  X = Q %*% newInvR
+  # if (n-r > 0){
+  #   zeroMat = matrix(0,nrow=r,ncol=n-r)
+  #   iMat = cbind(diag(1,nrow=n-r,ncol=n-r),t(zeroMat))
+  #   oInvR = cbind(zeroMat,invR)
+  #   newInvR = rbind(iMat,oInvR)
+  # } else {
+  #   newInvR = invR
+  # }
+  #
+  # X = Q %*% newInvR
 
   alpha = gsvdResult$alpha  # Singular values with sigma matrix
   mu = gsvdResult$beta  # Singular values with M matrix
@@ -73,7 +73,7 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
       epsilon = delta0
       # Formula given in pg 72, Hansen Rank Deficient and discrete ill posed problems
       for (i in (k+1): m) {
-        Bf = Bf + filter[i]*drop(t(U[,i])%*%rho_curr) * Q[,i] / gamma[i]
+        Bf = Bf + filter[i]*drop(t(U[,i])%*%rho_curr) / gamma[i]
 
         epsilon = epsilon + (1-filter[i])*drop(t(U[,i])%*%rho_curr)*U[,i]
       }

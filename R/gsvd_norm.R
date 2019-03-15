@@ -35,7 +35,7 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
   m = gsvdResult$m
   k = gsvdResult$k  #The first k generalized singular values are infinite.
   l = gsvdResult$l  #effective rank of the input matrix B. The number of finite generalized singular values after the first k infinite ones.
-  r = dim(invR)[1]
+  r = dim(R)[1]
 
 
   # Now start to form up the solution

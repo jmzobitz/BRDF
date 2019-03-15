@@ -66,26 +66,31 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
 
     # Formula given in pg 72, Hansen Rank Deficient and discrete ill posed problems
     delta0 <- (diag(m)-U%*%t(U))%*%rho_curr
-
+    epsilon0 <- rep(0,m)
     for (j in seq_along(lambda)) {
       filter = gamma^2/(gamma^2+lambda[j]^2)
       filter2 = alpha*mu/(alpha^2+mu^2*lambda[j]^2)
+      filter3 = alpha^2/(alpha^2+mu^2*lambda[j]^2)
       Bf=f0
-      epsilon = delta0
+    #  epsilon = delta0
+      epsilon <- epsilon0
       # Formula given in pg 72, Hansen Rank Deficient and discrete ill posed problems
-      for (i in (k+1): m) {
+      # for (i in (k+1): m) {
       #  Bf = Bf + filter[i]*drop(t(U[,i])%*%rho_curr) * Q[,i] / gamma[i]
 
-        epsilon = epsilon + (1-filter[i])*drop(t(U[,i])%*%rho_curr)*U[,i]
-      }
+      #  epsilon = epsilon + (1-filter[i])*drop(t(U[,i])%*%rho_curr)*U[,i]
+      # }
       if ( r <= m) {
         for (i in 1:l) {
           Bf[i] = filter2[i]*drop(t(U[,i])%*%rho_curr)
         }
+        for (i in (l+1):(m-k-l)) { epsilon[i]<- (1-filter3[i])*drop(t(U[,i])%*%rho_curr)}
+        for (i in (m-k-l+1):m) { epsilon[i]<- drop(t(U[,i])%*%rho_curr)}
       } else {
         for (i in 1:(m-k)) {
           Bf[i] = filter2[i]*drop(t(U[,i])%*%rho_curr)
         }
+        for (i in (m-k+1):m) { epsilon[i]<- (1-filter3[i])*drop(t(U[,i])%*%rho_curr)}
       }
       #f_results[[j]] <-data.frame(residual=norm(epsilon,type="2"),
 #                                  solution=norm(Bf,type="2"),

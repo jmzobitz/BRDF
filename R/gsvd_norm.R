@@ -50,13 +50,17 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
     epsilon0 <- rep(0,m)
     for (j in seq_along(lambda)) {
 
-      filter = alpha/(alpha^2+mu^2*lambda[j]^2)
+
 
       Bf=f0
     #  epsilon = delta0
       epsilon <- epsilon0
 
       if ( r <= m) {
+        # Define s and c and our filter
+        sigma <- alpha[(k+1):(k+l)]
+        mu <- beta[(k+1):(k+l)]
+        filter = sigma/(sigma^2+mu^2*lambda[j]^2)
        # Solution norm
          for (i in 1:l) {
           Bf[i] = filter[i]*mu[i]*drop(t(U[,i])%*%rho_curr)
@@ -65,6 +69,10 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
         for (i in (k+1):r) { epsilon[i]<- (1-filter[i]*alpha[i])*drop(t(U[,i])%*%rho_curr)}
         for (i in (r+1):m) { epsilon[i]<- drop(t(U[,i])%*%rho_curr)}
       } else {
+        # Define s and c and our filter
+        sigma <- alpha[(k+1):m]
+        mu <- beta[(k+1):m]
+        filter = sigma/(sigma^2+mu^2*lambda[j]^2)
         # Solution norm
         for (i in 1:(m-k)) {
           Bf[i] = filter[i]*mu[i]*drop(t(U[,i])%*%rho_curr)

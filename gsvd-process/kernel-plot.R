@@ -10,7 +10,6 @@ quantile(small_data$value,probs = c(0.025,0.975))
 dim(solution_list %>% bind_rows(.id="site"))
 
 
-modisBRDF$
 site_read = c("AU-Lox","IT-CA1","ZM-Mon","JP-MBF","DE-Hai","US-Wi3")
 band_read = c("band1","band2")
 

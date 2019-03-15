@@ -66,7 +66,7 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
           Bf[i] = filter[i]*mu[i]*drop(t(U[,i])%*%rho_curr)
          }
         # Residual norm
-        for (i in (k+1):r) { epsilon[i]<- (1-filter[i]*alpha[i])*drop(t(U[,i])%*%rho_curr)}
+        for (i in (k+1):r) { epsilon[i]<- (1-filter[i]*sigma[i])*drop(t(U[,i])%*%rho_curr)}
         for (i in (r+1):m) { epsilon[i]<- drop(t(U[,i])%*%rho_curr)}
       } else {
         # Define s and c and our filter
@@ -78,7 +78,7 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
           Bf[i] = filter[i]*mu[i]*drop(t(U[,i])%*%rho_curr)
         }
         # Residual norm
-        for (i in (k+1):m) { epsilon[i]<- (1-filter[i]*alpha[i])*drop(t(U[,i])%*%rho_curr)}
+        for (i in (k+1):m) { epsilon[i]<- (1-filter[i]*sigma[i])*drop(t(U[,i])%*%rho_curr)}
       }
 
       f_results[[j]] <-data.frame(rmse = sd(epsilon),

@@ -29,7 +29,7 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
   U = gsvdResult$U
   V = gsvdResult$V
   Q = gsvdResult$Q
- # invR = gsvdResult$invR
+  invR = gsvdResult$invR
 
   n = dim(Q)[2]
   m = gsvdResult$m

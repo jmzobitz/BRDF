@@ -22,79 +22,57 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
 
   # List to hold the results
   f_results <- vector("list", nLambda)  # For each of the lambdas
-  #  f_grande <- vector("list",length(band_vals))  # For each of the bands
-
 
   # Identify GSVD matrices and key dimensions
   U = gsvdResult$U
   V = gsvdResult$V
   Q = gsvdResult$Q
-  invR = gsvdResult$invR
+
 
   n = dim(Q)[2]
   m = gsvdResult$m
   k = gsvdResult$k  #The first k generalized singular values are infinite.
   l = gsvdResult$l  #effective rank of the input matrix B. The number of finite generalized singular values after the first k infinite ones.
-  r = dim(invR)[1]
+  r = k+l
 
-
-  # Now start to form up the solution
-  # Doing the multiplication, split Q = [Q1 Q2], where Q1 = first n-r columns of Q, Q2 last r columns
-  # if (n-r > 0){
-  #   zeroMat = matrix(0,nrow=r,ncol=n-r)
-  #   iMat = cbind(diag(1,nrow=n-r,ncol=n-r),t(zeroMat))
-  #   oInvR = cbind(zeroMat,invR)
-  #   newInvR = rbind(iMat,oInvR)
-  # } else {
-  #   newInvR = invR
-  # }
-  #
-  # X = Q %*% newInvR
 
   alpha = gsvdResult$alpha  # Singular values with sigma matrix
   mu = gsvdResult$beta  # Singular values with M matrix
-  gamma = gsvdResult$alpha/gsvdResult$beta
-
 
 
     rho_curr <- rho %>%
-   #   filter(band == band_vals[band_idx] ) %>%
       select(value) %>%
       as.matrix()
 
     f0 = rep(0,n)  # The initialization of it all
 
-    # Formula given in pg 72, Hansen Rank Deficient and discrete ill posed problems
-    delta0 <- (diag(m)-U%*%t(U))%*%rho_curr
+
     epsilon0 <- rep(0,m)
     for (j in seq_along(lambda)) {
-      filter = gamma^2/(gamma^2+lambda[j]^2)
-      filter2 = alpha*mu/(alpha^2+mu^2*lambda[j]^2)
-      filter3 = alpha^2/(alpha^2+mu^2*lambda[j]^2)
+
+      filter = alpha/(alpha^2+mu^2*lambda[j]^2)
+
       Bf=f0
     #  epsilon = delta0
       epsilon <- epsilon0
-      # Formula given in pg 72, Hansen Rank Deficient and discrete ill posed problems
-      # for (i in (k+1): m) {
-      #  Bf = Bf + filter[i]*drop(t(U[,i])%*%rho_curr) * Q[,i] / gamma[i]
 
-      #  epsilon = epsilon + (1-filter[i])*drop(t(U[,i])%*%rho_curr)*U[,i]
-      # }
       if ( r <= m) {
-        for (i in 1:l) {
-          Bf[i] = filter2[i]*drop(t(U[,i])%*%rho_curr)
-        }
-        for (i in (l+1):(m-k-l)) { epsilon[i]<- (1-filter3[i])*drop(t(U[,i])%*%rho_curr)}
-        for (i in (m-k-l+1):m) { epsilon[i]<- drop(t(U[,i])%*%rho_curr)}
+       # Solution norm
+         for (i in 1:l) {
+          Bf[i] = filter[i]*mu[i]*drop(t(U[,i])%*%rho_curr)
+         }
+        # Residual norm
+        for (i in (k+1):r) { epsilon[i]<- (1-filter[i]*alpha[i])*drop(t(U[,i])%*%rho_curr)}
+        for (i in (r+1):m) { epsilon[i]<- drop(t(U[,i])%*%rho_curr)}
       } else {
+        # Solution norm
         for (i in 1:(m-k)) {
-          Bf[i] = filter2[i]*drop(t(U[,i])%*%rho_curr)
+          Bf[i] = filter[i]*mu[i]*drop(t(U[,i])%*%rho_curr)
         }
-        for (i in (m-k+1):m) { epsilon[i]<- (1-filter3[i])*drop(t(U[,i])%*%rho_curr)}
+        # Residual norm
+        for (i in (k+1):m) { epsilon[i]<- (1-filter[i]*alpha[i])*drop(t(U[,i])%*%rho_curr)}
       }
-      #f_results[[j]] <-data.frame(residual=norm(epsilon,type="2"),
-#                                  solution=norm(Bf,type="2"),
-#                                  lambda=lambda[j])
+
       f_results[[j]] <-data.frame(rmse = sd(epsilon),
                                   residual=norm(epsilon,type="2"),
                                   solution=norm(Bf,type="2"),

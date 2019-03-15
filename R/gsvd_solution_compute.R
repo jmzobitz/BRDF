@@ -42,7 +42,7 @@ gsvd_solution_compute<-function(gsvdResult,lambda_df,rho) {
   m = gsvdResult$m
   k = gsvdResult$k  #The first k generalized singular values are infinite.
   l = gsvdResult$l  #effective rank of the input matrix B. The number of finite generalized singular values after the first k infinite ones.
-  r = dim(invR)[1]
+  r = k+l
 
 
   # Now start to form up the solution
@@ -60,28 +60,21 @@ gsvd_solution_compute<-function(gsvdResult,lambda_df,rho) {
 
   alpha = gsvdResult$alpha  # Singular values with sigma matrix
   mu = gsvdResult$beta  # Singular values with M matrix
-  gamma = gsvdResult$alpha/gsvdResult$beta
+  filter = alpha/(alpha^2+mu^2*lambda[j]^2)
+  g = rep(0,n)
 
-
-
-
-  f0 = rep(0,n)  # The initialization of it all
-
-  for (i in 1: k) {
-    f0 = f0 + drop(t(U[,i])%*%rho_curr) * X[,i]
+  if (r <= m) {
+    for(i in (n-r+1):(n-l)) {g[i]<- drop(t(U[,i])%*%rho_curr)}
+    for(i in (n-l+1):n) {g[i]<-filter[i]*drop(t(U[,i])%*%rho_curr) }
+  } else {
+    for(i in (n-r+1):(n-r+k)) {g[i]<- drop(t(U[,i])%*%rho_curr)}
+    for(i in (n-r+k+1):(n-r+m)) {g[i]<-filter[i]*drop(t(U[,i])%*%rho_curr) }
   }
 
-  for (j in seq_along(lambda)) {
-    filter = gamma^2/(gamma^2+lambda[j]^2)
-    f=f0
 
-    for (i in (k+1): m) {
-      f = f + filter[i]*drop(t(U[,i])%*%rho_curr) * X[,i] / alpha[i]
-    }
+    f_results[[j]] <- X %*% g
 
-    f_results[[j]] <- f
 
-  }
 
 
   out_little_f <- bind_cols(f_results)

@@ -44,25 +44,25 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
       select(value) %>%
       as.matrix()
 
-    f0 = rep(0,n)  # The initialization of it all
-
-    epsilon0 <- rep(0,m)
     for (j in seq_along(lambda)) {
 
       filter <- alpha/(alpha^2+lambda[j]^2*beta^2)
 
-      Bf=f0
-      epsilon <- epsilon0
+      Bf=rep(0,n)
+      epsilon <- rep(0,m)
 
       if ( r <= m) {
        # Solution norm
          for (i in 1:l) {
-           idx <- (n-r+i+1)
-          Bf[i] = filter[i]*beta[i]*drop(t(U[,idx])%*%rho_curr)
+          Bf[i] = filter[i]*beta[i]*drop(t(U[,i])%*%rho_curr)
          }
         # Residual norm
-        for (i in 1:r) { epsilon[i]<- (1-filter[i]*alpha[i])*drop(t(U[,i])%*%rho_curr)}
-        for (i in (r+1):m) { epsilon[i]<- drop(t(U[,i])%*%rho_curr)}
+        for (i in 1:r) {
+          epsilon[i]<- (1-filter[i]*alpha[i])*drop(t(U[,i])%*%rho_curr)
+          }
+        for (i in (r+1):m) {
+          epsilon[i]<- drop(t(U[,i])%*%rho_curr)
+          }
       } else {
 
         # Solution norm
@@ -70,7 +70,9 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
           Bf[i] = filter[i]*beta[i]*drop(t(U[,i])%*%rho_curr)
         }
         # Residual norm
-        for (i in 1:m) { epsilon[i]<- (1-filter[i]*alpha[i])*drop(t(U[,i])%*%rho_curr)}
+        for (i in 1:m) {
+          epsilon[i]<- (1-filter[i]*alpha[i])*drop(t(U[,i])%*%rho_curr)
+          }
       }
 
       f_results[[j]] <-data.frame(rmse = sd(epsilon),

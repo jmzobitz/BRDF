@@ -59,19 +59,22 @@ gsvd_solution_compute<-function(gsvdResult,lambda_df,rho) {
   X = Q %*% newInvR
 
   alpha = gsvdResult$alpha  # Singular values with sigma matrix
-  mu = gsvdResult$beta  # Singular values with M matrix
+  beta = gsvdResult$beta  # Singular values with M matrix
 
 
   for (j in seq_along(lambda)) {
-    filter = alpha/(alpha^2+mu^2*lambda[j]^2)
+    filter = alpha/(alpha^2+beta^2*lambda[j]^2)
    g = rep(0,n)
 
   if (r <= m) {
-    for(i in (n-r+1):(n-l)) {g[i]<- drop(t(U[,i])%*%rho_curr)}
-    for(i in (n-l+1):n) {g[i]<-filter[i]*drop(t(U[,i])%*%rho_curr) }
+    for(i in (n-r+1):n) {
+      idx <- n-r-i
+      g[i]<-filter[idx]*drop(t(U[,idx])%*%rho_curr)
+      }
   } else {
-    for(i in (n-r+1):(n-r+k)) {g[i]<- drop(t(U[,i])%*%rho_curr)}
-    for(i in (n-r+k+1):(n-r+m)) {g[i]<-filter[i]*drop(t(U[,i])%*%rho_curr) }
+    for(i in (n-r+1):m) {
+      idx <- n-r-i
+      g[i]<-filter[idx]*drop(t(U[,idx])%*%rho_curr) }
   }
 
 

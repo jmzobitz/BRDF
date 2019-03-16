@@ -57,7 +57,7 @@ gsvd_norm<-function(gsvdResult,lambda_df,rho) {
       if ( r <= m) {
        # Solution norm
          for (i in 1:l) {
-           idx <- (n-r+i)
+           idx <- (n-r+i+1)
           Bf[i] = filter[i]*beta[i]*drop(t(U[,idx])%*%rho_curr)
          }
         # Residual norm

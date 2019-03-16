@@ -1,8 +1,5 @@
 # Figure 1: Make a simple L-Curve plot for the figures.  This is easily generalizable if we want it to be.
 
-# Load up GSVD results, and filter them out accordingly
-load('../Saved-Files-12.08/fluxnet-gsvd.Rda')
-
 site <- 'AU-Lox'
 data <- fluxnet %>% filter(site==site)
 kernel_data <- kernel_matrix(site)
@@ -16,15 +13,6 @@ sigma <- band_uncertainty %>% filter(band=='band2') %>% select(sigma) %>% as.num
 
 out_values <- gsvd_norm(gsvd_data,lambda_init,rho_curr)
 
-
-
-
-outFileName = paste0('FluxnetOptimizeResults/',siteNames[i],'-band-',j,'-optResults.Rda')
-print(outFileName)
-lCurveData<-gsvdLambdaSeries(gsvdFiles[i],sitesData[i],outFileName,sigma[j],j)
-
-### Add on the site name
-lCurveData$site <- siteNames[i]
 
 
 

@@ -61,27 +61,42 @@ gsvd_solution_compute<-function(gsvdResult,lambda_df,rho) {
   alpha = gsvdResult$alpha  # Singular values with sigma matrix
   beta = gsvdResult$beta  # Singular values with M matrix
 
+  #####
+  f0 = rep(0,n)  # The initialization of it all
 
   for (j in seq_along(lambda)) {
     filter = alpha/(alpha^2+beta^2*lambda[j]^2)
-   g = rep(0,n)
+    f=f0
 
-  if (r <= m) {
-    for(i in (n-r+1):n) {
-      idx <- n-r-i
-      g[i]<-filter[idx]*drop(t(U[,idx])%*%rho_curr)
-      }
-  } else { # m < r
-    for(i in (n-r+1):(n-r+m)) {
-      idx <- n-r-i
-      g[i]<-filter[idx]*drop(t(U[,idx])%*%rho_curr) }
+    for (i in 1: m) {
+      f = f + filter[idx]*drop(t(U[,idx])%*%rho_curr) * X[,i]
+    }
+
+    f_results[[j]] <- f
+
   }
+  ######
+#
+#   for (j in seq_along(lambda)) {
+#     filter = alpha/(alpha^2+beta^2*lambda[j]^2)
+#    g = rep(0,n)
+#
+#   if (r <= m) {
+#     for(i in (n-r+1):n) {
+#       idx <- n-r-i
+#       g[i]<-filter[idx]*drop(t(U[,idx])%*%rho_curr)
+#       }
+#   } else { # m < r
+#     for(i in (n-r+1):(n-r+m)) {
+#       idx <- n-r-i
+#       g[i]<-filter[idx]*drop(t(U[,idx])%*%rho_curr) }
+#   }
+#
+#
+#     f_results[[j]] <- X %*% g
 
 
-    f_results[[j]] <- X %*% g
-
-
-}
+#}
 
   out_little_f <- bind_cols(f_results)
   names(out_little_f) <- lambda

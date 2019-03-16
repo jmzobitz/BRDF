@@ -69,7 +69,7 @@ gsvd_solution_compute<-function(gsvdResult,lambda_df,rho) {
     f=f0
 
     for (i in 1: m) {
-      f = f + filter[idx]*drop(t(U[,idx])%*%rho_curr) * X[,i]
+      f = f + filter[i]*drop(t(U[,i])%*%rho_curr) * X[,i]
     }
 
     f_results[[j]] <- f

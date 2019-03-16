@@ -83,13 +83,13 @@ gsvd_solution_compute<-function(gsvdResult,lambda_df,rho) {
 
   if (r <= m) {
     for(i in (n-r+1):n) {
-      idx <- n-r-i
+      idx <- i-(n-r)
       print(c(idx,r,m))
       g[i]<-filter[idx]*drop(t(U[,idx])%*%rho_curr)
       }
   } else { # m < r
     for(i in (n-r+1):(n-r+m)) {
-      idx <- n-r-i
+      idx <- i-(n-r)
       print(c(idx,r,m))
       g[i]<-filter[idx]*drop(t(U[,idx])%*%rho_curr) }
   }

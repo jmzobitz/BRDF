@@ -71,8 +71,8 @@ gsvd_solution_compute<-function(gsvdResult,lambda_df,rho) {
       idx <- n-r-i
       g[i]<-filter[idx]*drop(t(U[,idx])%*%rho_curr)
       }
-  } else {
-    for(i in (n-r+1):m) {
+  } else { # m < r
+    for(i in (n-r+1):(n-r+m)) {
       idx <- n-r-i
       g[i]<-filter[idx]*drop(t(U[,idx])%*%rho_curr) }
   }

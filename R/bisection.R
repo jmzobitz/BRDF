@@ -36,14 +36,20 @@ bisection<-function(gsvdResult,rho,uncertainty) {
     head(n=1) %>%
     as.vector()
 
-# If we have a case where we are either past the
-if (dim(a)[1]==0 || dim(b)[1]==0) {
-  out_return <- tail(compare_norm,n=1) %>% select(lambda)
-  out_return$converged = FALSE
+# If we have a case where the target value is not in our list.
+  if (dim(a)[1]==0 & dim(b)[1]!=0) {
+    out_return <- head(compare_norm,n=1) %>% select(lambda)
+    out_return$converged = FALSE
 
-  return(out_return)
-}
+    return(out_return)
+  }
 
+  if (dim(a)[1]!=0 & dim(b)[1]==0) {
+    out_return <- tail(compare_norm,n=1) %>% select(lambda)
+    out_return$converged = FALSE
+
+    return(out_return)
+  }
 
 
   mid <- 0.5*(a+b)

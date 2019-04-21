@@ -1,6 +1,6 @@
 #' Compute the solution for the kernel weights for a GSVD decomposition
 #'
-#' \code{gsvd_norm} Computes residual and solution norm for a GSVD matrix decomposition
+#' \code{old_gsvd_norm} Computes residual and solution norm for a GSVD matrix decomposition
 #'
 #' @param gsvdResult GSVD decomposition
 #' @param lambda_df smoothness parameter - can be a vector of values - must be a data frame
@@ -14,7 +14,7 @@
 #' @export
 
 
-gsvd_norm<-function(gsvdResult,lambda_df,rho) {
+old_gsvd_norm<-function(gsvdResult,lambda_df,rho) {
 
   lambda <- lambda_df
   # Identify size of lambda values and number of bands

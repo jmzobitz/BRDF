@@ -38,7 +38,7 @@ prepender_k <- function(string){
 big_data$kernel_variable <- prepender_k(big_data$kernel)
 
 
-prepender_b <- function(string, prefix = "Reflectance Band ") {
+prepender_b <- function(string, prefix = "Band ") {
   string_new=string %>% str_sub(-1)
   paste0(prefix,string_new)
 
@@ -59,7 +59,10 @@ kernelPlot   <- big_data %>%
   theme(legend.position="bottom") +
   theme(strip.text.x = element_text(size=12),
         strip.text.y = element_text(size=12)) +
-  scale_x_continuous(breaks = c(1,90,180,270,365))
+  theme_bw() +
+  theme(strip.background = element_rect(colour="white", fill="white")) +
+  scale_x_continuous(breaks = c(1,90,180,270,365)) +
+  theme_bw()
 
 fileName <- paste0('manuscript-figures/kernelPlot.png')
 ggsave(fileName,plot=kernelPlot,width=14)

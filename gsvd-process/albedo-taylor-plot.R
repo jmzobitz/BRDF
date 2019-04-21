@@ -27,7 +27,7 @@ albedo_data <- mcd43A3_data %>% left_join(gsvd_data,by=c("site","time","band"))
 
 ### We need to spread the data out
 prepender_k <- function(string, prefix = "Kernel ") paste0(prefix,string)
-prepender_b <- function(string, prefix = "Reflectance Band ") {
+prepender_b <- function(string, prefix = "Band ") {
   string_new=string %>% str_sub(-1)
   paste0(prefix,string_new)
 
@@ -72,9 +72,11 @@ curr_plot <- t_plot +
         legend.text=element_text(size=12),
         legend.title=element_text(size=14)) +
   theme(strip.text.x = element_text(size=12),
-        strip.text.y = element_text(size=12))
+        strip.text.y = element_text(size=12),
+        strip.background = element_rect(colour="white", fill="white")) +
+  theme_bw()
 
 
 fileName <- paste0('manuscript-figures/albedoTaylor.png')
-ggsave(fileName,plot=curr_plot,width=14,height=3)
+ggsave(fileName,plot=curr_plot,width=18,height=3)
 

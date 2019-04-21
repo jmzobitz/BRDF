@@ -15,7 +15,7 @@ gsvd_data <- albedo_list %>% bind_rows(.id="site") %>%
 
 big_data <- rbind(mcd43A3_data,gsvd_data)
 
-prepender_b <- function(string, prefix = "Reflectance Band ") {
+prepender_b <- function(string, prefix = "Band ") {
   string_new=string %>% str_sub(-1)
   paste0(prefix,string_new)
 
@@ -33,9 +33,13 @@ albedoPlot   <- big_data %>%
         legend.text=element_text(size=12),
         legend.title=element_text(size=16)) +
   theme(legend.position="bottom") +
+  theme_bw() +
   theme(strip.text.x = element_text(size=12),
-        strip.text.y = element_text(size=12)) +
+        strip.text.y = element_text(size=12),
+        strip.background = element_rect(colour="white", fill="white")) +
   scale_x_continuous(breaks = c(1,90,180,270,365))
+
+
 
 
 fileName <- paste0('manuscript-figures/albedoPlot.png')

@@ -21,8 +21,10 @@ data_plot <- fluxnet %>%
         legend.title=element_text(size=16)) +
   theme(legend.position="bottom") +
   theme(strip.text.x = element_text(size=14),
-        strip.text.y = element_text(size=14)) +
-  scale_x_continuous(breaks = c(1,90,180,270,365))
+        strip.text.y = element_text(size=14),
+        strip.background = element_rect(colour="white", fill="white")) +
+  scale_x_continuous(breaks = c(1,90,180,270,365)) +
+  theme_bw()
 
 
 fileName <- paste0('manuscript-figures/dataPlot.png')

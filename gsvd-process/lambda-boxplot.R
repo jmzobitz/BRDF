@@ -28,7 +28,11 @@ lambda_boxplot <- lambda_list %>% bind_rows() %>%
         axis.title=element_text(size=16),
         title=element_text(size=26),
         legend.text=element_text(size=12),
-        legend.title=element_text(size=16))
+        legend.title=element_text(size=16)) +
+  theme(strip.text.x = element_text(size=12),
+        strip.text.y = element_text(size=12),
+        strip.background = element_rect(colour="white", fill="white")) +
+  theme_bw()
 
 fileName <- paste0('manuscript-figures/boxplot.png')
 ggsave(fileName,plot=lambda_boxplot)

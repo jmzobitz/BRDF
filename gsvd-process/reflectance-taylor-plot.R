@@ -24,15 +24,6 @@ compute_rho <- function(K,solution_list) {
 # Next we need to compute our comparisons across each band
 # Function to rename the kernel values from 0 1 2 to the abbreviation
 
-prepender_k <- function(string){
-  name <- string %>% str_replace_all("0","f[iso]") %>%
-    str_replace_all("1","f[vol]") %>%
-    str_replace_all("2","f[geo]")
-
-
-  return(name)
-
-}
 
 
 # Allows us to add a heading to our facets
@@ -92,7 +83,7 @@ data_points <- fluxnet %>%
 taylor_rsq <- taylor_comparisons %>%
   left_join(data_points,by=c("site")) %>%
   left_join(lambda_values,by=c("site","band")) %>%
-  filter(converged) %>%  # only look at sites than have converged
+  filter(converged)   # only look at sites than have converged
 
 
 
@@ -102,20 +93,21 @@ curr_plot <- t_plot +
   geom_point(data=taylor_rsq,aes(x=x_coord,y=y_coord)) +
   facet_grid(.~band,labeller=labeller(kernel=label_parsed,band=prepender_b)) +
   labs(x="",y=expression(sigma[GSVD])) +
+  theme_bw() +
   theme(axis.text = element_text(size=14),
         axis.title=element_text(size=28),
         title=element_text(size=26),
         legend.text=element_text(size=12),
-        legend.title=element_text(size=14)) +
-  theme(strip.text.x = element_text(size=12),
+        legend.title=element_text(size=14),
+        strip.text.x = element_text(size=12),
         strip.text.y = element_text(size=12),
-        strip.background = element_rect(colour="white", fill="white")) +
-  theme_bw()
+        strip.background = element_rect(colour="white", fill="white"))
+
 
 
 
 fileName <- paste0('manuscript-figures/reflectanceTaylor.png')
-ggsave(fileName,plot=curr_plot,width=18,height=3)
+ggsave(fileName,plot=curr_plot,width=18,height=3.5)
 
 
 

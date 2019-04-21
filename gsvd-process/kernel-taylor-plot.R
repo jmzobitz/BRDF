@@ -73,6 +73,7 @@ curr_plot <- t_plot +
   geom_point(data=kernel_rsq,aes(x=x_coord,y=y_coord)) +
   facet_grid(kernel~band,labeller=labeller(kernel=label_parsed,band=prepender_b)) +
   labs(x="",y=expression(sigma[GSVD])) +
+  theme_bw() +
   theme(axis.text = element_text(size=14),
         axis.title=element_text(size=28),
         title=element_text(size=26),
@@ -80,13 +81,13 @@ curr_plot <- t_plot +
         legend.title=element_text(size=14)) +
   theme(strip.text.x = element_text(size=12),
         strip.text.y = element_text(size=12),
-        strip.background = element_rect(colour="white", fill="white")) +
-  theme_bw()
+        strip.background = element_rect(colour="white", fill="white"))
+
 
 
 
 fileName <- paste0('manuscript-figures/kernelTaylor.png')
-ggsave(fileName,plot=curr_plot,width=18,height=6)
+ggsave(fileName,plot=curr_plot,width=18,height=7)
 
 
 

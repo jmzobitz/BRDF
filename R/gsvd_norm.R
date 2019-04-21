@@ -15,7 +15,7 @@
 
 
 gsvd_norm<-function(gsvdResult,lambda_df,rho) {
-
+  # Putting something in here
   lambda <- lambda_df
   # Identify size of lambda values and number of bands
   nLambda = length(lambda)  # Number of lambdas we have in our sequence

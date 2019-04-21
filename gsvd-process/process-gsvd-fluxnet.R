@@ -1,7 +1,7 @@
 ### 1. Call a site name
 ### NEED TO LOAD UP TIDYVERSE AND GEIGEN FIRST?
 library(tidyverse)
-
+library(BRDF)
 # Pull up the data
 site_list <- fluxnet %>% split(.$site)
 ### 2.1 Compute the kernel matrices

@@ -6,6 +6,7 @@
 
 library(tidyverse)
 library(devtools)
+library(lubridate)
 
 #source("kernelFunctions.R")  # Not needed to source this because it is in the R file
 
@@ -43,11 +44,11 @@ stateFlagData <- data.frame(
   cirrus=inData$MOD09GA_006_state_1km_1_cirrus_detected, #0b00
   internal_cloud=inData$MOD09GA_006_state_1km_1_internal_cloud_algorithm_flag, #0b0
   internal_fire=inData$MOD09GA_006_state_1km_1_internal_fire_algorithm_flag,#0b0
-  snow_ice=inData$`MOD09GA_006_state_1km_1_MOD35_snow/ice_flag`,#0b0
-  next_to_clous=inData$MOD09GA_006_state_1km_1_Pixel_is_adjacent_to_cloud, #0b0
-  Salt_pan=inData$MOD09GA_006_state_1km_1_Salt_pan,#0b0
-  internal_snow=inData$MOD09GA_006_state_1km_1_internal_snow_mask) #0b0
-
+  #snow_ice=inData$`MOD09GA_006_state_1km_1_MOD35_snow/ice_flag`,#0b0
+  next_to_cloud=inData$MOD09GA_006_state_1km_1_Pixel_is_adjacent_to_cloud, #0b0
+  Salt_pan=inData$MOD09GA_006_state_1km_1_Salt_pan#0b0
+  #internal_snow=inData$MOD09GA_006_state_1km_1_internal_snow_mask #0b0
+)
 
 state_flag_matrix <- stateFlagData
 
@@ -105,7 +106,7 @@ fluxnet <- inData %>%
   rename(site=ID,time=Date) %>%
   mutate(time=yday(time),K_Iso=1,K_RossThick,K_LiSparse,bands_flags=rowSums(bands_flag_matrix),states_flag=rowSums(state_flag_matrix)) %>%
   bind_cols(bands) %>%
-  filter(bands_flags ==7 & states_flag == 10) %>%
+  filter(bands_flags ==7 & states_flag == 8) %>%
   select(-bands_flags,-states_flag) %>%
   arrange(site,time)
 

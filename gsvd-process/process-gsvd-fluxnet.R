@@ -12,9 +12,10 @@ data_list <-map(site_list,~kernel_matrix(.x$site))
 
 # Compute the GSVD, using the package geigen, save it for later
 #gsvd_list <-map(data_list,gsvd_compute)
-#save(gsvd_list,file='../Saved-Files-12.08/fluxnet-gsvd.Rda')
+#save(gsvd_list,file='../Saved-Files-12.08/fluxnet-gsvd-nosnow-flag.Rda')
 
-load('../Saved-Files-12.08/fluxnet-gsvd.Rda')
+#load('../Saved-Files-12.08/fluxnet-gsvd.Rda')
+load('../Saved-Files-12.08/fluxnet-gsvd-nosnow-flag.Rda')
 
 
 

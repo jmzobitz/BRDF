@@ -21,9 +21,9 @@ lambda_boxplot <- lambda_list %>% bind_rows() %>%
   filter(converged) %>%
   ggplot() +
   geom_boxplot(aes(x=band,y=lambda)) +
-  geom_label(data=nConverged,aes(x=band,y=70,label=tot),size=4) +
+  geom_label(data=nConverged,aes(x=band,y=25,label=tot),size=4) +
   scale_x_discrete(labels=1:7)+
-  labs(x="Reflectance Band",y=expression(lambda)) +
+  labs(x="Band",y=expression(lambda)) +
   theme(axis.text = element_text(size=10),
         axis.title=element_text(size=16),
         title=element_text(size=26),
@@ -32,7 +32,8 @@ lambda_boxplot <- lambda_list %>% bind_rows() %>%
   theme(strip.text.x = element_text(size=12),
         strip.text.y = element_text(size=12),
         strip.background = element_rect(colour="white", fill="white")) +
-  theme_bw()
+  theme_bw() +
+  ylim(c(0,30))
 
 fileName <- paste0('manuscript-figures/boxplot.png')
 ggsave(fileName,plot=lambda_boxplot)

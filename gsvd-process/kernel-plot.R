@@ -51,6 +51,7 @@ kernelPlot   <- big_data %>%
   ggplot(aes(x=time,y=value,color=method,shape=method)) + geom_point() +
   facet_grid(site~band+kernel_variable,labeller=labeller(kernel_variable=label_parsed,band=prepender_b)) +
   labs(x="Day of Year", y="Kernel weights",color="Method",shape="Method") +
+  theme_bw() +
   theme(axis.text = element_text(size=14),
         axis.title=element_text(size=28),
         title=element_text(size=26),
@@ -59,10 +60,9 @@ kernelPlot   <- big_data %>%
   theme(legend.position="bottom") +
   theme(strip.text.x = element_text(size=12),
         strip.text.y = element_text(size=12)) +
-  theme_bw() +
   theme(strip.background = element_rect(colour="white", fill="white")) +
-  scale_x_continuous(breaks = c(1,90,180,270,365)) +
-  theme_bw()
+  scale_x_continuous(breaks = c(1,90,180,270,365))
+
 
 fileName <- paste0('manuscript-figures/kernelPlot.png')
 ggsave(fileName,plot=kernelPlot,width=14)

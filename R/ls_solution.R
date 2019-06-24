@@ -45,10 +45,25 @@ ls_solution <- function(site_name) {
           break
         }
         rhs <- paste(names(coefficients(f1))[coefficients(f1)>0],collapse = "+")
+
+        if (nchar(rhs)==0) {
+
+
+          out_value <- data.frame(t(coefficients(f1)))
+          out_value[1] <- 0
+
+
+
+
+          break
+          }
+
         fmla <- as.formula(paste("value ~ -1+",rhs))
         f1 <- lm(fmla,data=small_data,weights = weights)
+        out_value <- data.frame(t(coefficients(f1)))
       }
-      results[[i]] <- data.frame(t(coefficients(f1)),time=min(time_value,365))
+      #results[[i]] <- data.frame(t(coefficients(f1)),time=min(time_value,365))
+      results[[i]] <- data.frame(out_value,time=min(time_value,365))
 
     }
   }

@@ -36,33 +36,33 @@ ls_solution <- function(site_name) {
 
 
       f1 <- lm(value ~ -1 + K_Iso + K_RossThick + K_LiSparse,data=small_data,weights = weights)
-
-      while(sum(coefficients(f1)<0)>=1 ) {
+      out_value <- data.frame(t(coefficients(f1)))
+      out_value[is.na(out_value)] <- 0 # Set NA values to 0
+      print((coefficients(f1)))
+      while(sum(coefficients(f1)<0)>0 ) {
 
         # Exit this loop if we have ALL the coefficients are 0
         if (sum(coefficients(f1)<0) ==3) {
-
+          out_value <- data.frame(t(coefficients(f1)))
+          out_value[1] <- 0
           break
         }
         rhs <- paste(names(coefficients(f1))[coefficients(f1)>0],collapse = "+")
 
         if (nchar(rhs)==0) {
 
-
           out_value <- data.frame(t(coefficients(f1)))
           out_value[1] <- 0
 
-
-
-
           break
-          }
+        }
 
         fmla <- as.formula(paste("value ~ -1+",rhs))
         f1 <- lm(fmla,data=small_data,weights = weights)
         out_value <- data.frame(t(coefficients(f1)))
+        out_value[is.na(out_value)] <- 0 # Set NA values to 0
       }
-      #results[[i]] <- data.frame(t(coefficients(f1)),time=min(time_value,365))
+
       results[[i]] <- data.frame(out_value,time=min(time_value,365))
 
     }

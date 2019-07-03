@@ -20,18 +20,15 @@ out_values <- gsvd_norm(gsvd_data,lambda_init,rho_curr)
 p<-out_values %>% spread(key=norm,value=result) %>% ggplot() +
   geom_point(aes(y=solution,x=residual),size=4) +
   geom_vline(xintercept = sigma,color='red',size=1,linetype=2) +
-  labs(y=expression("||Bf||"), x=expression(paste("||",epsilon,"||")))  +
+  labs(y=expression(paste("||",bold(B),bolditalic(f),"||")), x=expression(paste("||",bolditalic("\u03B5"),"||")))  +
+  theme_bw() +
   theme(axis.text = element_text(size=14),
-        axis.title=element_text(size=28),
-        title=element_text(size=26),
-        legend.text=element_text(size=12),
-        legend.title=element_text(size=16)) +
-  theme(legend.position="bottom") + annotate("text", x = .08, y = .55, label = expression(paste("Increasing ",lambda)),size=8) +
-  annotate("segment", x = .07, xend = .13, y = .5, yend = .5, colour = "black", size=1.5, arrow=arrow()) + xlim(c(0,0.2))+
-  theme(strip.text.x = element_text(size=12),
-        strip.text.y = element_text(size=12),
-        strip.background = element_rect(colour="white", fill="white")) +
-  theme_bw()
+        axis.title=element_text(size=28,face='bold')) +
+  annotate("text", x = .08, y = .55, label = expression(paste("Increasing ",italic("\u03BB"))),size=8) +
+  annotate("segment", x = .07, xend = .13, y = .5, yend = .5, colour = "black", size=1.5, arrow=arrow()) + xlim(c(0,0.2)) +
+  theme( panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+
 
 
 

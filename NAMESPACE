@@ -2,6 +2,7 @@
 
 export(albedo_compute)
 export(bisection)
+export(formBMatrix)
 export(gsvd_compute)
 export(gsvd_norm)
 export(gsvd_optimize)

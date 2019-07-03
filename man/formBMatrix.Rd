@@ -20,4 +20,5 @@ The B matrix of first order difference. See Quaife and Lewis 2010
 \examples{
 
 B <- formBmatrix(365,3)
+
 }

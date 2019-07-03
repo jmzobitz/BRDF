@@ -1,13 +1,6 @@
 # Figure 4: kernel weight plot over time
 
-# Determine how many kernel weights are negative
-solution_list %>% bind_rows(.id="site") %>% filter(value<0) %>% summarize(mean=mean(value),sd=sd(value),tot_v=n())
 
-small_data <-solution_list %>% bind_rows(.id="site") %>% filter(value<0)
-quantile(small_data$value,probs = c(0.025,0.975))
-
-# Number of kernels
-dim(solution_list %>% bind_rows(.id="site"))
 
 
 site_read = c("AU-Lox","IT-CA1","ZM-Mon","JP-MBF","DE-Hai","US-Wi3")
@@ -22,7 +15,13 @@ gsvd_data <- solution_list %>% bind_rows(.id="site") %>%
   filter(site %in% site_read & band %in% band_read ) %>%
   mutate(method='GSVD')
 
-big_data <- rbind(modisBRDF_data,gsvd_data)
+ls_data <- ls_results %>%
+  rename("0"=K_Iso,"1"=K_RossThick,"2"=K_LiSparse) %>%
+  gather(key=kernel,value=value,"0","1","2") %>%
+  filter(site %in% site_read & band %in% band_read ) %>%
+  mutate(method='WLS')
+
+big_data <- rbind(modisBRDF_data,gsvd_data,ls_data)
 
 
 prepender_k <- function(string){
@@ -61,7 +60,7 @@ kernelPlot   <- big_data %>%
   theme(strip.text.x = element_text(size=12),
         strip.text.y = element_text(size=12)) +
   theme(strip.background = element_rect(colour="white", fill="white")) +
-  scale_x_continuous(breaks = c(1,90,180,270,365))
+  scale_x_continuous(breaks = c(1,90,180,270,365)) + ylim(c(0,1))
 
 
 fileName <- paste0('manuscript-figures/kernelPlot.png')

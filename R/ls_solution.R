@@ -38,30 +38,38 @@ ls_solution <- function(site_name) {
       f1 <- lm(value ~ -1 + K_Iso + K_RossThick + K_LiSparse,data=small_data,weights = weights)
       out_value <- data.frame(t(coefficients(f1)))
       out_value[is.na(out_value)] <- 0 # Set NA values to 0
-      print((coefficients(f1)))
-      while(sum(coefficients(f1)<0)>0 ) {
 
-        # Exit this loop if we have ALL the coefficients are 0
-        if (sum(coefficients(f1)<0) ==3) {
-          out_value <- data.frame(t(coefficients(f1)))
-          out_value[1] <- 0
-          break
+      # Exit this loop if we have ALL the coefficients are 0
+      if (sum(out_value<0) ==3) {
+        out_value[names(out_value)] <- 0
+        out_value[1] <- 1  # Set the first kernel weight to 1
+
+      } else {
+
+        while(sum(out_value<0)>0 ) {
+
+          # Set negative values to zero
+          out_value[out_value<0] <- 0
+          # Formula for RHS
+          rhs <- paste(names(out_value)[out_value>0],collapse = "+")
+
+           if (nchar(rhs)==0) {
+          #
+          #
+          #
+             break
+           }
+
+          fmla <- as.formula(paste("value ~ -1+",rhs))
+          f1 <- lm(fmla,data=small_data,weights = weights)
+          updated_coeff <- data.frame(t(coefficients(f1)))
+          updated_coeff[is.na(updated_coeff)] <- 0 # Set NA values to 0
+          out_value[names(updated_coeff)] <- updated_coeff
+
         }
-        rhs <- paste(names(coefficients(f1))[coefficients(f1)>0],collapse = "+")
 
-        if (nchar(rhs)==0) {
-
-          out_value <- data.frame(t(coefficients(f1)))
-          out_value[1] <- 0
-
-          break
-        }
-
-        fmla <- as.formula(paste("value ~ -1+",rhs))
-        f1 <- lm(fmla,data=small_data,weights = weights)
-        out_value <- data.frame(t(coefficients(f1)))
-        out_value[is.na(out_value)] <- 0 # Set NA values to 0
       }
+
 
       results[[i]] <- data.frame(out_value,time=min(time_value,365))
 

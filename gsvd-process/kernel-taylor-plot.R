@@ -72,7 +72,7 @@ t_plot <- taylor_plot()
 curr_plot <- t_plot +
   geom_point(data=kernel_rsq,aes(x=x_coord,y=y_coord)) +
   facet_grid(kernel~band,labeller=labeller(kernel=label_parsed,band=prepender_b)) +
-  labs(x="",y=expression(sigma[GSVD])) +
+  labs(x="",y=expression(italic("\u03C3")[GSVD])) +
   theme_bw() +
   theme(axis.text = element_text(size=14),
         axis.title=element_text(size=28),
@@ -81,8 +81,9 @@ curr_plot <- t_plot +
         legend.title=element_text(size=14)) +
   theme(strip.text.x = element_text(size=12),
         strip.text.y = element_text(size=12),
-        strip.background = element_rect(colour="white", fill="white"))
-
+        strip.background = element_rect(colour="white", fill="white")) +
+  theme( panel.grid.major = element_blank(),
+       panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
 
 

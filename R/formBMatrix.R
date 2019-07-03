@@ -9,6 +9,8 @@
 #' @examples
 #'
 #' B <- formBmatrix(365,3)
+#'
+#' @export
 
 
 

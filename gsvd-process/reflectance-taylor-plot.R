@@ -134,7 +134,7 @@ t_plot <- taylor_plot()
 curr_plot <- t_plot +
   geom_point(data=joined_data,aes(x=x_coord,y=y_coord,color=method,shape=method),size=2) +
   facet_grid(.~band,labeller=labeller(kernel=label_parsed,band=prepender_b)) +
-  labs(x="",y=expression(sigma),color="Inversion method",shape="Inversion method") +
+  labs(x="",y=expression(italic("\u03C3")[GSVD]),color="Inversion method",shape="Inversion method") +
   theme_bw() +
   theme(legend.position = "bottom",
         axis.text = element_text(size=14),
@@ -144,7 +144,9 @@ curr_plot <- t_plot +
         legend.title=element_text(size=14),
         strip.text.x = element_text(size=12),
         strip.text.y = element_text(size=12),
-        strip.background = element_rect(colour="white", fill="white"))
+        strip.background = element_rect(colour="white", fill="white")) +
+  theme( panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
 
 

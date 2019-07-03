@@ -58,23 +58,26 @@ albedo_rsq <- albedo_data %>%
   left_join(data_points,by=c("site")) %>%
   left_join(lambda_values,by=c("site","band")) %>%
   filter(converged)
-
-
+expression(sigma[GSVD])
+expression(paste("||",bolditalic(sigma[GSVD]),"||"))
+expression(paste("||",bolditalic("\u03B5"),"||"))
 t_plot <- taylor_plot()
 
 curr_plot <- t_plot +
   geom_point(data=albedo_rsq,aes(x=x_coord,y=y_coord)) +
   facet_grid(~band,labeller=labeller(band=prepender_b))+
-   labs(x="",y=expression(sigma[GSVD])) +
+   labs(x="",y=expression(italic("\u03C3")[GSVD])) +
   theme_bw()+
   theme(axis.text = element_text(size=14),
-        axis.title=element_text(size=28),
+        axis.title=element_text(size=24),
         title=element_text(size=26),
         legend.text=element_text(size=12),
         legend.title=element_text(size=14)) +
   theme(strip.text.x = element_text(size=12),
         strip.text.y = element_text(size=12),
-        strip.background = element_rect(colour="white", fill="white"))
+        strip.background = element_rect(colour="white", fill="white")) +
+  theme( panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
 
 

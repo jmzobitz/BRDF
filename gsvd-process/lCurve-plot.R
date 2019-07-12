@@ -34,4 +34,4 @@ p<-out_values %>% spread(key=norm,value=result) %>% ggplot() +
 
 
 fileName <- paste0('manuscript-figures/lCurve.png')
-ggsave(fileName,plot=p)
+ggsave(fileName,plot=p,dpi=600)

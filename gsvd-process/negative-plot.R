@@ -39,7 +39,9 @@ geom_bar(aes(x=as.factor(both_test),y=tot,fill=kernel),stat="identity",
   scale_x_discrete(limits=rev(c("0","3","4","2")),
                    labels=rev(c("WLS > 0; GSVD > 0", "WLS = 0; GSVD > 0", "WLS > 0; GSVD = 0", "WLS = 0 ; GSVD < 0"))) + coord_flip() +
   scale_fill_discrete(name="Kernel Weights",
-                      labels=c(as.expression(bquote(bolditalic(f)[iso])),as.expression(bquote(bolditalic(f)[vol])),as.expression(bquote(bolditalic(f)[geo]))))
+                      labels=c(as.expression(bquote(bolditalic(f)[iso])),as.expression(bquote(bolditalic(f)[vol])),as.expression(bquote(bolditalic(f)[geo])))) +
+  theme( panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
 
 

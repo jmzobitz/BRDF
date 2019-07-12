@@ -10,6 +10,7 @@
 #' # To be filled in later
 
 #' @import dplyr
+#' @import greybox
 
 #' @export
 
@@ -30,45 +31,12 @@ ls_solution <- function(site_name) {
     if (dim(small_data)[1]>=3) {   # 3 is the minimum number we need to do the inversion.
 
       time_value <- (i-1) + t/2
-      weights <- data.frame(weight_value=array(1,dim=dim(small_data)[1])) %>%
-        mutate(value =  if_else(small_data$time == time_value,small_data$value,weight_value)) %>%
-        pull(weight_value)
 
-
-      f1 <- lm(value ~ -1 + K_Iso + K_RossThick + K_LiSparse,data=small_data,weights = weights)
+      f1 <- alm(value ~ K_RossThick + K_LiSparse,data=small_data,distribution="dlaplace",scale=11.5)
       out_value <- data.frame(t(coefficients(f1)))
-      out_value[is.na(out_value)] <- 0 # Set NA values to 0
 
-      # Exit this loop if we have ALL the coefficients are 0
-      if (sum(out_value<0) ==3) {
-        out_value[names(out_value)] <- 0
-        out_value[1] <- 1  # Set the first kernel weight to 1
 
-      } else {
-
-        while(sum(out_value<0)>0 ) {
-
-          # Set negative values to zero
-          out_value[out_value<0] <- 0
-          # Formula for RHS
-          rhs <- paste(names(out_value)[out_value>0],collapse = "+")
-
-           if (nchar(rhs)==0) {
-          #
-          #
-          #
-             break
-           }
-
-          fmla <- as.formula(paste("value ~ -1+",rhs))
-          f1 <- lm(fmla,data=small_data,weights = weights)
-          updated_coeff <- data.frame(t(coefficients(f1)))
-          updated_coeff[is.na(updated_coeff)] <- 0 # Set NA values to 0
-          out_value[names(updated_coeff)] <- updated_coeff
-
-        }
-
-      }
+      names(out_value)[1] <- "K_Iso"
 
 
       results[[i]] <- data.frame(out_value,time=min(time_value,365))
@@ -86,3 +54,4 @@ ls_solution <- function(site_name) {
 
   return(out_results)
 }
+

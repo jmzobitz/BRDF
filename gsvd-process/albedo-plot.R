@@ -39,7 +39,7 @@ albedoPlot   <- big_data %>%
   geom_point(data = subset(big_data, method == "GSVD")) +
   geom_point(data = subset(big_data, method == "MCD43A3")) +
   facet_grid(site~band,labeller=labeller(band=prepender_b)) +
-  labs(x="Day of Year", y="White-Sky Albedo",color="Method",shape="Method") +
+  labs(x="Day of year", y="White sky albedo",color="Method",shape="Method") +
   theme_bw() +
   theme(axis.text = element_text(size=14),
         axis.title=element_text(size=24),
@@ -59,5 +59,5 @@ albedoPlot   <- big_data %>%
 
 
 fileName <- paste0('manuscript-figures/albedoPlot.png')
-ggsave(fileName,plot=albedoPlot,width=7,height=12)
+ggsave(fileName,plot=albedoPlot,width=7,height=12,dpi=600)
 

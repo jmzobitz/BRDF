@@ -4,7 +4,7 @@
 data_points <- fluxnet %>%
   group_by(site) %>%
   summarize(tot=n()) %>%
-  rbind(c("","Total. No. Days")) %>%
+  rbind(c("","Total no. days")) %>%
   mutate(site = fct_reorder(site, desc(site)))
 
 
@@ -15,7 +15,7 @@ data_plot <- fluxnet %>%
   ggplot() +
   geom_text(data=data_points,aes(x=380,y=site,label=tot),size=6,hjust='right',nudge_x = 6) +
   geom_point(aes(x=time,y=site),size=3,shape=15) +
-  labs(y="Site",x="Day of Year") +
+  labs(y="Site",x="Day of year") +
   xlim(0,385)+
   #theme(strip.text.x = element_text(size=14),
   #      strip.text.y = element_text(size=14),
@@ -28,4 +28,4 @@ theme(axis.text = element_text(size=18),
       axis.title=element_text(size=22))
 
 fileName <- paste0('manuscript-figures/dataPlot.png')
-ggsave(fileName,plot=data_plot,width=11,height=10)
+ggsave(fileName,plot=data_plot,width=11,height=10,dpi=600)

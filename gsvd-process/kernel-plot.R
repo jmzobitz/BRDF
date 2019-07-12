@@ -25,9 +25,9 @@ big_data <- rbind(modisBRDF_data,gsvd_data,ls_data)
 
 
 prepender_k <- function(string){
- name <- string %>% str_replace_all("0","f[iso]") %>%
-    str_replace_all("1","f[vol]") %>%
-    str_replace_all("2","f[geo]")
+ name <- string %>% str_replace_all("0","Isotropic") %>%
+    str_replace_all("1","Volumetric") %>%
+    str_replace_all("2","Geometric")
 
 
   return(name)
@@ -46,10 +46,10 @@ prepender_b <- function(string, prefix = "Band ") {
 
 kernelPlot   <- big_data %>%
   mutate(site = fct_relevel(site, site_read),
-         kernel_variable = fct_relevel(kernel_variable, c("f[iso]","f[vol]","f[geo]"))) %>%
+         kernel_variable = fct_relevel(kernel_variable, c("Isotropic","Volumetric","Geometric"))) %>%
   ggplot(aes(x=time,y=value,color=method,shape=method)) + geom_point() +
   facet_grid(site~band+kernel_variable,labeller=labeller(kernel_variable=label_parsed,band=prepender_b)) +
-  labs(x="Day of Year", y="Kernel weights",color="Method",shape="Method") +
+  labs(x="Day of year", y="Kernel weights",color="Method",shape="Method") +
   theme_bw() +
   theme(axis.text = element_text(size=14),
         axis.title=element_text(size=28),
@@ -64,5 +64,5 @@ kernelPlot   <- big_data %>%
 
 
 fileName <- paste0('manuscript-figures/kernelPlot.png')
-ggsave(fileName,plot=kernelPlot,width=14)
+ggsave(fileName,plot=kernelPlot,width=14,dpi=600)
 

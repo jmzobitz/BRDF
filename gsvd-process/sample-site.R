@@ -11,7 +11,6 @@ library(BRDF)
 site_data <- fluxnet %>% filter(site=="IT-CA1")
 
 
-
 # ### Compute the least squares solutions
 ls_sample <- function(input_data,sample_pct) {
 
@@ -29,9 +28,14 @@ ls_sample <- function(input_data,sample_pct) {
 percentages <- c(1,0.75,0.5,0.25)
 
 # # Pull up the data
- ls_results <- percentages %>%
-   map(.f=~ls_sample(site_data,.x)) %>%
-   bind_rows(.id="pct")
+ ls_results_sample <- percentages %>%
+   map(.f=~ls_sample(site_data,.x))
+
+ names(ls_results_sample) <- percentages
+
+ ls_results_sample <- ls_results_sample %>% bind_rows(.id="pct")
+
+
 
 
  ### Now do the GSVD approach
@@ -88,9 +92,12 @@ gsvd_sample <- function(input_data,sample_pct) {
 }
 
 # # Pull up the data
-gsvd_results <- percentages %>%
-  map(.f=~gsvd_sample(site_data,.x)) %>%
-  bind_rows(.id="pct")
+gsvd_results_sample <- percentages %>%
+  map(.f=~gsvd_sample(site_data,.x))
+
+names(gsvd_results_sample) <- percentages
+
+gsvd_results_sample <- gsvd_results_sample %>% bind_rows(.id="pct")
 
 
 ## Ok, now we need to plot them together
@@ -107,24 +114,37 @@ modisBRDF_data <- modisBRDF %>%
 
 
 
-gsvd_data <- gsvd_results %>%
+gsvd_data_sample <- gsvd_results_sample %>%
   mutate(method='GSVD')
 
-ls_data <- ls_results %>%
+ls_data_sample <- ls_results_sample %>%
   rename("0"=K_Iso,"1"=K_RossThick,"2"=K_LiSparse) %>%
   gather(key=kernel,value=value,"0","1","2") %>%
-  mutate(method='Least Squares')
+  mutate(method='Laplace')
 
-big_data <- rbind(modisBRDF_data,gsvd_data,ls_data)
+big_data <- rbind(modisBRDF_data,gsvd_data_sample,ls_data_sample)
+
+kernel_names <- c(
+  `0` = "Isotropic",
+  `1` = "Volumetric",
+  `2` = "Geometric"
+)
 
 
-big_data %>%
+
+
+
+kernel_sample_plot <- big_data %>%
   filter(band=='band2',
          method !='MCD43A1') %>%
   ggplot(aes(x=time,y=value)) + geom_point(aes(color=pct)) +
-  geom_line(data=subset(modisBRDF,band=='band2' & site=='IT-CA1'),aes(x=time,y=value),color='black') +
+  geom_line(data=subset(modisBRDF,band=='band2' & site=='IT-CA1'),aes(x=time,y=value,color='MCD43A1')) +
     ylim(c(0,1)) +
-  facet_grid(method~kernel) +
+  facet_grid(method~kernel,labeller = labeller(kernel = as_labeller((kernel_names)))) +
+  labs(x="Day of year", y="Kernel weight",color="Percentile") +
+  scale_color_manual(name="Data Utilized",
+                     values = c("#F8766D","#7CAE00", "#00BFC4", "#C77CFF", "#000000"),
+                       labels=c("25%", "50%", "75%","100%","MCD43A1")) +
   theme_bw() +
   theme(legend.position = "bottom",
         axis.text = element_text(size=14),
@@ -136,9 +156,12 @@ big_data %>%
         strip.text.y = element_text(size=12),
         strip.background = element_rect(colour="white", fill="white")) +
   theme( panel.grid.major = element_blank(),
-         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
+  scale_x_continuous(breaks = c(1,90,180,270,365)) + ylim(c(0,1))
 
 
+fileName <- paste0('manuscript-figures/kernel-sample-plot.png')
+ggsave(fileName,plot=kernel_sample_plot,height=4.0,dpi=600)
 
 # Now compare with mcd43 in terms of Taylor diagrams
 # Allows us to add a heading to our facets
@@ -152,7 +175,7 @@ prepender_b <- function(string, prefix = "Band ") {
 ##  Taylor Plot for modis
 ##########
 
-taylor_data <- rbind(gsvd_data,ls_data) %>%
+taylor_data <- rbind(gsvd_data_sample,ls_data_sample) %>%
   inner_join(modisBRDF_data,by=c("time","kernel","band")) %>%
   select(-method.y,pct.y) %>%
   group_by(method.x,pct.x,band,kernel) %>%
@@ -171,8 +194,9 @@ t_plot <- taylor_plot()
 
 curr_plot <- t_plot +
   geom_point(data=taylor_data,aes(x=x_coord,y=y_coord,color=pct.x,shape=method.x),size=3) +
-  facet_grid(kernel~band,labeller=labeller(kernel=label_parsed,band=prepender_b)) +
-  labs(x="",y=expression(italic("\u03C3")),color="Percent Sampling",shape="Inversion method") +
+  facet_grid(kernel~band,labeller=labeller(kernel=as_labeller((kernel_names)),band=prepender_b)) +
+  labs(x="",y=expression(italic("\u03C3")),color="Data Utilized",shape="Inversion method") +
+  scale_color_discrete(labels=c("25%", "50%", "75%","100%")) +
   theme_bw() +
   theme(legend.position = "bottom",
         axis.text = element_text(size=14),
@@ -189,8 +213,8 @@ curr_plot <- t_plot +
 
 
 
-#fileName <- paste0('manuscript-figures/reflectanceTaylor.png')
-#ggsave(fileName,plot=curr_plot,width=19,height=4.0)
+fileName <- paste0('manuscript-figures/taylorSample.png')
+ggsave(fileName,plot=curr_plot,width=18,height=7)
 
 
 

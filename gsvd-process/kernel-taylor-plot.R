@@ -5,9 +5,9 @@
 # Function to rename the kernel values from 0 1 2 to the abbreviation
 
 prepender_k <- function(string){
-  name <- string %>% str_replace_all("0","f[iso]") %>%
-    str_replace_all("1","f[vol]") %>%
-    str_replace_all("2","f[geo]")
+  name <- string %>% str_replace_all("0","Isotropic") %>%
+    str_replace_all("1","Volumetric") %>%
+    str_replace_all("2","Geometric")
 
 
   return(name)
@@ -63,7 +63,7 @@ kernel_rsq <- kernel_data %>%
   left_join(data_points,by=c("site")) %>%
   left_join(lambda_values,by=c("site","band")) %>%
   filter(converged) %>%  # only look at sites than have converged
-  mutate(kernel = fct_relevel(kernel, c("f[iso]","f[vol]","f[geo]"))) # Reorder the factors so they makes sense in how they are read (rather than alphabetical)
+  mutate(kernel = fct_relevel(kernel, c("Isotropic","Volumetric","Geometric"))) # Reorder the factors so they makes sense in how they are read (rather than alphabetical)
 
 
 
@@ -88,7 +88,7 @@ curr_plot <- t_plot +
 
 
 fileName <- paste0('manuscript-figures/kernelTaylor.png')
-ggsave(fileName,plot=curr_plot,width=18,height=7)
+ggsave(fileName,plot=curr_plot,width=18,height=7,dpi=600)
 
 
 

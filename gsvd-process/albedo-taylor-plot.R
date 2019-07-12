@@ -82,5 +82,5 @@ curr_plot <- t_plot +
 
 
 fileName <- paste0('manuscript-figures/albedoTaylor.png')
-ggsave(fileName,plot=curr_plot,width=18,height=3.5)
+ggsave(fileName,plot=curr_plot,width=18,height=3.5,dpi=600)
 

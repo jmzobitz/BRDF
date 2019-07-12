@@ -152,7 +152,7 @@ curr_plot <- t_plot +
 
 
 fileName <- paste0('manuscript-figures/reflectanceTaylor.png')
-ggsave(fileName,plot=curr_plot,width=19,height=4.0)
+ggsave(fileName,plot=curr_plot,width=19,height=4.0,dpi=600)
 
 
 

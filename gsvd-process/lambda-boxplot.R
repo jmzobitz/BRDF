@@ -36,5 +36,5 @@ lambda_boxplot <- lambda_list %>% bind_rows() %>%
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
 fileName <- paste0('manuscript-figures/boxplot.png')
-ggsave(fileName,plot=lambda_boxplot)
+ggsave(fileName,plot=lambda_boxplot,dpi=600)
 
